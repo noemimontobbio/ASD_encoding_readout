@@ -16,13 +16,15 @@ class driftmodel(nn.Module):
     """
     Logistic model with drift
     """
-    def __init__(self, input_size=15, t_final=10, pdrop=0, return_act=False):
+    def __init__(self, input_size=15, pdrop=0):
+        """
+        input_size : number of features
+        pdrop : dropout probability
+        """
         super(driftmodel, self).__init__()
         # Settings
         self.input_size = input_size
-        self.t_final = t_final
         self.pdrop = pdrop
-        self.return_act = return_act
         # Layers
         self.fc = nn.Linear(input_size,1)
         self.rfc = nn.Linear(1,1, bias=False)
@@ -31,25 +33,35 @@ class driftmodel(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, t, x, y):
+        """
+        t : time step
+        x : input at time t
+        y : output at time t-1
+        """
         act = self.rfc(y-.5) + self.fc(self.drop(x))
         y = self.sigmoid(act)
-        outs = (act, y) if self.return_act else y
-        return outs
+        return y
 
 
 #####################################################################################
 
 class TimeWarping(object):
     """
-    Applies a warping to the time variable.
+    Warping transform over the time variable
     """
     def __init__(self, deltarange, randomdelta=True):
+        """
+        deltarange: exponent for time warping via t_new = T*(t_old/T)**delta
+        randomdelta: if True, randomly choose exponent in [1/deltarange, deltarange]
+        """
         super(TimeWarping, self).__init__()
         self.deltarange = deltarange
         self.randomdelta = randomdelta
 
     def __call__(self, x):
         if self.deltarange!=1:
+            if self.deltarange < 1:
+                self.deltarange = 1/self.deltarange
             delta = (self.deltarange - 1/self.deltarange)*np.random.random_sample() \
                     + 1/self.deltarange if self.randomdelta else self.deltarange
             timebins = x.shape[-1] # tensor is (features x timebins)
@@ -63,12 +75,12 @@ class TimeWarping(object):
 
 def compute_pvalues(seq, dmean=None, optsided='two', direction=None):
     """
-    seq = sequence of outputs (nPerms+1 x nOut)
+    seq = sequence of outputs (n_perms+1 x n_out)
           seq[0,:] = original values
           seq[1:,:] = values from permuted input
     dmean = distribution mean
     optsided = 'one' for one-sided, 'two' for two-sided
-    direction = 1 or -1, for one-sided case
+    direction = 1 or -1, for one-sided case (inferred from data if not specified)
     """
 
     seq = np.array(seq)

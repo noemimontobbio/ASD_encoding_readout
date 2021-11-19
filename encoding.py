@@ -251,7 +251,7 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
                 print(trial+1, end=' ')
 
             # Initialize the model
-            net = model(t_final=timebins, input_size=len(kinfeat), pdrop=dropout)
+            net = model(input_size=len(kinfeat), pdrop=dropout)
 
 
             # Train the model

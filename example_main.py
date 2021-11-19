@@ -13,7 +13,7 @@ from utils import driftmodel, compute_pvalues
 from encoding import encoding
 from readout import readout
 
-#######################################################################################################
+####################################################################################################
 # Settings
 
 iC = 2 # movement group (1:ASD, 2:TD, 0:both)
@@ -40,7 +40,7 @@ FeatNames = ['WV',  # 0 Wrist Velocity
 CondNames = ['BOTH','ASD','TD']
 nsub = 35
 
-#######################################################################################################
+####################################################################################################
 # Data
 
 # The data file is available as Supplemental Material of the paper
@@ -48,7 +48,7 @@ nsub = 35
 execdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Execution')
 obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
 
-#######################################################################################################
+####################################################################################################
 # Encoding model
 
 # Train encoding model once, visualize coefficients and loss function:
@@ -80,10 +80,10 @@ plt.title('%s encoding accuracy: null distribution' %CondNames[iC])
 #######################################################################################################
 # Readout model
 
-# Train readout model on 100 resamplings of the data:
+# Train readout models of all observers on 200 resamplings of the data:
 read_outs = readout(driftmodel, execdata, obsdata, iC=iC, iG=iG, kinfeat=kinfeat,
                     nresample=100, verbose=1)
-# Visualize estimated readout coefficients (mean of normalised readout vector over observers):
+# Visualize estimated readout coefficients (mean over observers of normalised readout vectors):
 readbetas_all = read_outs['betas'].mean(axis=1)
 readbetas_all = readbetas_all/np.linalg.norm(readbetas_all,ord=1,axis=1,keepdims=True)
 readbetas = np.abs(readbetas_all).mean(axis=0)
@@ -95,20 +95,3 @@ plt.xlabel('kinematic features')
 plt.ylabel('mean fraction of coefficients')
 plt.title('%s watch %s' %(CondNames[iG],CondNames[iC]))
 
-# Compute null distribution for readout weights:
-read_outs = readout(driftmodel, execdata, obsdata, iC=iC, iG=iG, kinfeat=kinfeat,
-                    permtest=True, verbose=1)
-permbetas = read_outs['permbetas']
-# Compare null distribution with resampled weights:
-permbetas[:,0,:] = readbetas
-pvalues = []
-for subj in range(nsub):
-    pvalues.append(compute_pvalues(permbetas[subj,:,:]))
-selected_features = np.sum(pvalues, axis=0)
-sfsorted = selected_features[enc_idx]
-plt.figure()
-plt.bar(np.arange(len(sfsorted)), sfsorted, color='lightgray')
-plt.xticks(np.arange(len(encnames)), encnames, rotation='vertical')
-plt.xlabel('kinematic features')
-plt.ylabel('number of subjects')
-plt.title('%s watch %s: selected features' %(CondNames[iG],CondNames[iC]))

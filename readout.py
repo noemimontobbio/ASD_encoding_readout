@@ -119,8 +119,6 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
     # load data
     if verbose>1:
         print('\nLoading %sread%s data...' %(CondNames[iG], CondNames[iC]))
-    execdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Execution')
-    obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
     alldata, allwdata = [], []
     if nresample>1:
         tkin, tlab, wkin, wlab = [], [], [], []
@@ -280,7 +278,7 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
                         ('' if not permtest else ' (perm#%d)' %iperm)))
 
                 # Initialize the model
-                net = model(t_final=timebins, input_size=len(kinfeat), pdrop=dropout)
+                net = model(input_size=len(kinfeat), pdrop=dropout)
 
 
                 # Train the model
