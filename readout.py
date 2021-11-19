@@ -15,7 +15,7 @@ import os
 import sys
 sys.path.append('../')
 
-from dataset import EncReadDATA
+from load_data import EncReadDATA
 from utils import TimeWarping
 
 
