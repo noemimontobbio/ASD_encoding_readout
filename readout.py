@@ -123,17 +123,19 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
     if nresample>1:
         tkin, tlab, wkin, wlab = [], [], [], []
     for ts in range(nsub):
-        alldata.append(EncReadDATA(execdata, iC=iC, mode='read',
+        data_tmp = EncReadDATA(execdata, iC=iC, mode='read',
                          kinfeat=kinfeat, obsdata=obsdata,
-                         iG=iG, tasksubj=ts))
+                         iG=iG, tasksubj=ts)
+        alldata.append(data_tmp)
         if nresample>1:
             tkin.append(copy.deepcopy(alldata[ts].kindata))
             tlab.append(copy.deepcopy(alldata[ts].target))
         if augment:
-            allwdata.append(EncReadDATA(execdata, iC=iC, mode='read',
+            wdata_tmp = EncReadDATA(execdata, iC=iC, mode='read',
                           kinfeat=kinfeat, obsdata=obsdata,
                           iG=iG, tasksubj=ts, transform=transform,
-                          augment=augment))
+                          augment=augment)
+            allwdata.append(wdata_tmp)
             if nresample>1:
                 wkin.append(copy.deepcopy(allwdata[ts].kindata))
                 wlab.append(copy.deepcopy(allwdata[ts].target))
@@ -161,7 +163,7 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
             print('\n========= Resampling #%d/%d =========' %(iperm+1,nresample))
         if verbose==1:
                 print('%s watch %s -- subject # (out of %d): '
-                      %(CondNames[iG], CondNames[iC], nsub), end=' ')
+                      %(CondNames[iG], CondNames[iC], nsub)) #, end=' ')
 
         if permtest and ncv > 5 and iperm > 0:
             ncv = 5
@@ -179,7 +181,6 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
                     wresample = wresample + list(resample+i*len(trainset))
                 trainset.kindata = tkin[tasksubj][resample,:,:]
                 trainset.target = tlab[tasksubj][resample]
-
 
 
             if permtest and iperm > 0:
@@ -285,10 +286,8 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
 
                 criterion = nn.BCELoss()
 
-                best_model_wts = copy.deepcopy(net.state_dict())
                 best_acc = 0.0
                 best_epoch = 0
-                last_epoch = nepochs
 
                 lossdata = []
 
@@ -301,7 +300,6 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
 
                     if epoch - best_epoch > 100:
                         # if training accuracy does not increase for 100 epochs, break
-                        last_epoch = epoch
                         break
 
                     optimizer = optim.Adam(net.parameters(), weight_decay=lambda2)
@@ -344,24 +342,22 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
                     if epoch_acc > best_acc:
                         best_epoch = epoch
                         best_acc = epoch_acc
-                        best_model_wts = copy.deepcopy(net.state_dict())
 
 
                 if verbose>1:
                     print('Finished training' + (' for fold #%d' %(trial+1) if cv else '')
                         +(': best train accuracy = %.3f at epoch %d\n' %(best_acc, best_epoch+1))
                      )
-                trainperf.append(best_acc)
+                trainperf.append(epoch_acc)
                 if nresample>1:
-                    trainperf_resampled[tasksubj].append(best_acc)
+                    trainperf_resampled[tasksubj].append(epoch_acc)
 
 
                 # model weights
-                net.load_state_dict(best_model_wts)
                 betas = net.fc.weight.detach().numpy().squeeze()
                 if nresample > 1 :
                     betas_resampled[tasksubj].append(betas)
-                if cv:
+                if cv and iperm==0:
                     cvbetas[tasksubj].append(betas)
 
 
@@ -394,7 +390,7 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
             if permtest and cv:
                 permacc[tasksubj].append(np.mean(cvacc))
             elif permtest and not cv:
-                permacc[tasksubj].append(best_acc)
+                permacc[tasksubj].append(epoch_acc)
                 permbetas[tasksubj].append(betas)
             elif not permtest and not cv:
                 readbetas.append(betas)

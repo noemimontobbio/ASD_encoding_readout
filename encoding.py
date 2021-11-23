@@ -137,7 +137,7 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
         print('\nENCODING MODEL ON %s DATASET\n' %(CondNames[iC]))
     if verbose==1 and (permtest or (nresample>1)):
         print('%s (out of %d): ' %('Permutation' if permtest else 'Resample',
-                                nperms if permtest else nresample), end=' ')
+                                    nperms if permtest else nresample))
     elif verbose==1 and cv:
         print('Fold (out of %d): ' %(kcv*ncv), end=' ')
 
@@ -150,7 +150,8 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
             if verbose>1:
                 print('========= Resampling #%d/%d =========' %(iperm+1,nresample))
             elif verbose==1:
-                print(iperm+1, end=' ')
+                print(' '*(3-len(str(iperm+1)))+str(iperm+1),
+                      end=(' ' if (iperm+1)%20 else '\n'))
             resample = np.random.choice(np.arange(len(trainset)), size=len(trainset))
             trainset.kindata = tkin[resample,:,:]
             trainset.target = tlab[resample]
@@ -165,7 +166,9 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
             print('========= Permutation #%d/%d %s========='
                   %(iperm,nperms,'(non-permuted data) ' if iperm==0 else ''))
         elif permtest and (verbose==1):
-                print(iperm, end=' ')
+                print(' '*(3-len(str(iperm)))+str(iperm)
+                      +(' (non-permuted data)' if iperm==0 else ''),
+                      end=(' ' if iperm%20 else '\n'))
 
 
         if permtest and (iperm > 0):
@@ -259,7 +262,6 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
             criterion = nn.BCELoss()
 
             #_?_#################
-            best_model_wts = copy.deepcopy(net.state_dict())
             best_acc = 0.0
             best_epoch = 0
             last_epoch = nepochs
@@ -320,7 +322,6 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
                 if epoch_acc > best_acc:
                     best_epoch = epoch
                     best_acc = epoch_acc
-                    best_model_wts = copy.deepcopy(net.state_dict())
 
 
             if verbose>1:
@@ -329,7 +330,6 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
                  )
                 print()
 
-            net.load_state_dict(best_model_wts)
             betas = net.fc.weight.detach().numpy().squeeze()
             if permtest and not cv:
                 permbetas[iperm,:] = betas
