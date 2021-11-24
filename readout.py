@@ -420,12 +420,11 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
 
         for tasksubj in range(nsub):
             if cv:
-                print('%s task subject %s : mean accuracy over CV folds = %.2f (%.2f on training)'
-                 %(CondNames[iG],subjID[tasksubj],perfmean[tasksubj],
-                   trainperf[tasksubj]))
+                print('%s task subject %s : mean accuracy over CV folds = %.1f%%'
+                 %(CondNames[iG],subjID[tasksubj],perfmean[tasksubj]*100))
             else:
-                print('%s subject %s : accuracy on training = %.2f'
-                 %(CondNames[iG],subjID[tasksubj],trainperf[tasksubj]))
+                print('%s subject %s : accuracy on training = %.1f%%'
+                 %(CondNames[iG],subjID[tasksubj],trainperf[tasksubj]*100))
 
 
     outputs = {}

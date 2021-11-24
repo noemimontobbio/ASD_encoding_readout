@@ -421,7 +421,7 @@ def encoding(model, execdata, iC, kinfeat=range(15), deltarange=1.5, n_augment=3
     if verbose:
 
         if cv:
-            print('\nEncoding model CV performance on %s DATASET: %d%%'
+            print('\nEncoding model on %s DATASET: mean accuracy over CV folds = %.1f%%'
                   %(CondNames[iC],np.mean(trial_acc0)*100))
 
         # Warnings

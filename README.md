@@ -1,12 +1,16 @@
 # ASD intention encoding and readout
 
-This repository contains functions to train and evaluate the 
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+
+This repository contains Python code to train and evaluate the 
 intention encoding and readout models introduced in [[1]](#1).
 The data file is available as Supplemental Material of the paper.
 
-### Example usage 
+## Example usage 
 
-#### Setup
+All code in this section is contained in `example_main.py`.
+
+### Setup
 
 Import libraries and functions.
 ```python
@@ -54,9 +58,9 @@ obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
 
 <br />
 
-#### Encoding model examples
+### Encoding model examples
 
-- Train encoding model once on kinematic data (`execdata`) of selected group (`iC`). 
+- Train encoding model once, on kinematic data (`execdata`) of selected group (`iC`). 
 Visualize coefficients and loss function plot (`plots=True`).
 
     ```python
@@ -109,7 +113,8 @@ Display detailed info (`verbose=2`).
     
     
     
-    Encoding model CV performance on TD DATASET: 96%
+    Encoding model on TD DATASET: : mean accuracy over CV folds = 96.1%
+  
     NOTE : trained with data augmentation
     ```
   
@@ -154,7 +159,7 @@ The number of permutations (`n_perms`) defaults to 200.
 
 <br />
 
-#### Readout model examples
+### Readout model examples
 
 - Train readout models of all observers of the selected group (`iG`) 
  watching selected actions (`iC`), on 200 resamplings of the data 
@@ -253,14 +258,18 @@ Display detailed info (`verbose=2`).
     
     Readout model on TD kinematics, TD group 
   
-    TD task subject S001C : mean accuracy over CV folds = 0.72 (0.89 on training)
+    TD task subject S001C : mean accuracy over CV folds = 72.0%
     .........
-    TD task subject S035C : mean accuracy over CV folds = 0.59 (0.90 on training)
+    TD task subject S035C : mean accuracy over CV folds = 59.1%
+  
+    NOTE : trained with data augmentation
     ```
 
 <br />
 
-### References
+
+
+## References
 <a id="1">[1]</a> 
 Montobbio, N., Cavallo, A., Albergo, D., Ansuini, C., 
 Battaglia, F., Podda, J., Nobili, L., Panzeri, S., 
