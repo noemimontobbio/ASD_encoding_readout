@@ -1,9 +1,10 @@
-# ASD intention encoding and readout
+# ASD kinematic encoding and readout
 
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 
 This repository contains Python code to train and evaluate the 
-intention encoding and readout models introduced in [[1]](#1).
+*kinematic encoding* and *kinematic readout* models of intention
+introduced in [[1]](#1).
 The data file is available as Supplemental Material of the paper.
 
 ## Example usage 
@@ -58,9 +59,10 @@ obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
 
 <br />
 
-### Encoding model examples
+### Kinematic encoding examples
 
-- Train encoding model once, on kinematic data (`execdata`) of selected group (`iC`). 
+- Train kinematic encoding model once, on kinematic data (`execdata`) 
+of selected group (`iC`). 
 Visualize coefficients and loss function plot (`plots=True`).
 
     ```python
@@ -70,7 +72,7 @@ Visualize coefficients and loss function plot (`plots=True`).
   
 <br />
     
-- Evaluate encoding model with 5-fold cross validation 
+- Evaluate kinematic encoding model with 5-fold cross validation 
 (`cv=True`; `kcv` defaults to 5) 
 repeated 50 times (`ncv`, defaults to 50). 
 Display detailed info (`verbose=2`).
@@ -143,7 +145,7 @@ The number of permutations (`n_perms`) defaults to 200.
 
 <br />
 
-- Train encoding model on 1000 resamplings of the data (`nresample=1000`). 
+- Train kinematic encoding model on 1000 resamplings of the data (`nresample=1000`). 
   Visualize bootstrap estimates (mean±SEM) of the coefficients (`plots=True`).
     ```python
     enc_outs3 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
@@ -159,17 +161,17 @@ The number of permutations (`n_perms`) defaults to 200.
 
 <br />
 
-### Readout model examples
+### Kinematic readout examples
 
-- Train readout models of all observers of the selected group (`iG`) 
+- Train kinematic readout models of all observers of the selected group (`iG`) 
  watching selected actions (`iC`), on 200 resamplings of the data 
  (kinematics, `execdata`, and observer choices, `obsdata`):
     ```python
     read_outs1 = readout(driftmodel, execdata, obsdata, iC=iC, iG=iG, kinfeat=kinfeat,
                         nresample=200, verbose=1)
     ```
-  Visualize estimated readout coefficients 
-  (mean over observers of normalized readout vectors), ordered by 
+  Visualize estimated readout model coefficients 
+  (mean over observers of normalized kinematic readout vectors), ordered by 
   relevance of kinematic features in [encoding](#encidx) (`enc_idx`):
     ```python
     readbetas_all = read_outs1['betas'].mean(axis=1)
@@ -186,7 +188,7 @@ The number of permutations (`n_perms`) defaults to 200.
 
 <br />
 
-- Perform permutation test (`permtest=True`) on readout coefficients 
+- Perform permutation test (`permtest=True`) on readout model coefficients 
 (note: `cv` defaults to `False`, so the weights are estimated on *all* data at 
 each permutation). 
 The number of permutations (`n_perms`) defaults to 200.
@@ -214,7 +216,7 @@ The number of permutations (`n_perms`) defaults to 200.
   
 <br />
     
-- Evaluate readout models of all observers with 5-fold cross validation 
+- Evaluate kinematic readout models of all observers with 5-fold cross validation 
 (`cv=True`; `kcv` defaults to 5) 
 repeated 50 times (`ncv`, defaults to 50). 
 Display detailed info (`verbose=2`).
