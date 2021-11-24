@@ -21,16 +21,16 @@ iG = 2 # observer group (1:ASD, 2:TD)
 
 kinfeat = range(15) # kinematic features to use
                     # among the following:
-FeatNames = ['WV',  # 0 Wrist Velocity
-             'GA',  # 1 Grip Aperture
-             'WH',  # 2 Wrist Height
-             'IX',  # 3 Index X-coord
-             'IY',  # 4 Index Y-coord
-             'IZ',  # 5 Index Z-coord
-             'TX',  # 6 Thumb X-coord
-             'TY',  # 7 Thumb Y-coord
-             'TZ',  # 8 Thumb Z-coord
-            'DPX',  # 9 Dorsum Plane X-coord
+FeatNames = ['WV',  #  0 Wrist Velocity
+             'GA',  #  1 Grip Aperture
+             'WH',  #  2 Wrist Height
+             'IX',  #  3 Index X-coord
+             'IY',  #  4 Index Y-coord
+             'IZ',  #  5 Index Z-coord
+             'TX',  #  6 Thumb X-coord
+             'TY',  #  7 Thumb Y-coord
+             'TZ',  #  8 Thumb Z-coord
+            'DPX',  #  9 Dorsum Plane X-coord
             'DPY',  # 10 Dorsum Plane Y-coord
             'DPZ',  # 11 Dorsum Plane Z-coord
             'FPX',  # 12 Finger Plane X-coord
@@ -55,27 +55,27 @@ obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
 enc_outs0 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
                     plots=True, verbose=2)
 
-# Train encoding model on 1000 resamplings of the data and visualize estimated coefficients:
-enc_outs1 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
-                    nresample=1000, plots=True, verbose=1)
-encbetas = np.mean(enc_outs1['betas'], axis=0)
-enc_idx = np.argsort(np.abs(encbetas))[::-1]
-encnames = [FeatNames[i] for i in enc_idx]
-
 # Evaluate encoding model with 5-fold cross validation repeated 50 times:
-enc_outs2 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
+enc_outs1 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
                     cv=True, verbose=2)
 
 # Perform permutation test (200 perms) on cross-validated accuracy and plot null distribution:
-enc_outs3 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
+enc_outs2 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
                     cv=True, permtest=True, verbose=1)
-permacc = enc_outs3['permacc']
+permacc = enc_outs2['permacc']
 plt.figure()
 plt.hist(permacc[1:], color='lightgray')
 plt.axvline(permacc[0], color='k', linestyle='--')
 plt.xticks([np.mean(permacc[1:]), permacc[0]],
         ['%.2f\nnull mean' %np.mean(permacc[1:]),'%.2f\nmodel accuracy' %permacc[0]])
 plt.title('%s encoding accuracy: null distribution' %CondNames[iC])
+
+# Train encoding model on 1000 resamplings of the data and visualize estimated coefficients:
+enc_outs3 = encoding(driftmodel, execdata, iC=iC, kinfeat=kinfeat,
+                    nresample=1000, plots=True, verbose=1)
+encbetas = np.mean(enc_outs3['betas'], axis=0)
+enc_idx = np.argsort(np.abs(encbetas))[::-1]
+encnames = [FeatNames[i] for i in enc_idx]
 
 #######################################################################################################
 # Readout model
