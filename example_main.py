@@ -114,3 +114,7 @@ plt.xlabel('kinematic features')
 plt.ylabel('number of subjects')
 plt.title('%s watch %s: selected features' %(CondNames[iG],CondNames[iC]))
 
+
+# Evaluate kinematic readout models of all observers with 5-fold cross validation repeated 50 times:
+read_outs3 = readout(driftmodel, execdata, obsdata, iC=iC, iG=iG, kinfeat=kinfeat,
+                         cv=True, verbose=2)

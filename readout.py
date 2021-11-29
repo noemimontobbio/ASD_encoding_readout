@@ -118,7 +118,7 @@ def readout(model, execdata, obsdata, iC, iG, kinfeat=range(15), deltarange=1.5,
 
     # load data
     if verbose>1:
-        print('\nLoading %sread%s data...' %(CondNames[iG], CondNames[iC]))
+        print('\nLoading %swatch%s data...' %(CondNames[iG], CondNames[iC]))
     alldata, allwdata = [], []
     if nresample>1:
         tkin, tlab, wkin, wlab = [], [], [], []

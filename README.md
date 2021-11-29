@@ -1,15 +1,13 @@
-# ASD kinematic encoding and readout
+# ASD kinematic encoding and readout of intention
 
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 
 This repository contains Python code to train and evaluate the 
-*kinematic encoding* and *kinematic readout* models of intention
+*kinematic encoding* and *kinematic readout* models 
 introduced in [[1]](#1).
 The data file is available as Supplemental Material of the paper.
 
 ## Example usage 
-
-All code in this section is contained in `example_main.py`.
 
 ### Setup
 
@@ -51,7 +49,7 @@ FeatNames = ['WV',  #  0 Wrist Velocity
 CondNames = ['BOTH','ASD','TD']
 nsub = 35
 ```
-Load data (file available as Supplemental Material of [[1]](#1)).
+Load data (the data file is available as Supplemental Material of [[1]](#1)).
 ```python
 execdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Execution')
 obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
@@ -229,7 +227,7 @@ Display detailed info (`verbose=2`).
     READOUT MODEL ON TD KINEMATICS, TD GROUP
   
   
-    Loading TDreadTD data...
+    Loading TDwatchTD data...
     Done!
   
   
@@ -269,7 +267,9 @@ Display detailed info (`verbose=2`).
 
 <br />
 
+All code in this section can be found in `example_main.py`.
 
+<br />
 
 ## References
 <a id="1">[1]</a> 
