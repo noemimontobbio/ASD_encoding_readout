@@ -5,7 +5,8 @@
 This repository contains Python code to train and evaluate the 
 *kinematic encoding* and *kinematic readout* models 
 introduced in [[1]](#1).
-The data file is available as Supplemental Material of the paper.
+It is built to work with the .xslx data file available as 
+Supplemental Material of the paper.
 
 ## Example usage 
 
