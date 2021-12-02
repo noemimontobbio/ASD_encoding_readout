@@ -44,7 +44,7 @@ nsub = 35
 # Data
 
 # The data file is available as Supplemental Material of the paper
-# "Intersecting intention encoding and readout in autism" (**doi**)
+# "Intersecting kinematic encoding and readout of intention in autism" (**doi**)
 execdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Execution')
 obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
 

@@ -50,7 +50,7 @@ FeatNames = ['WV',  #  0 Wrist Velocity
 CondNames = ['BOTH','ASD','TD']
 nsub = 35
 ```
-Load data (the data file is available as Supplemental Material of [[1]](#1)).
+Load data (the data file is available as Supplemental Material of [[1]](#1) ).
 ```python
 execdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Execution')
 obsdata = pd.read_excel('ASD_enc_read_DATA.xlsx', sheet_name='Observation')
@@ -71,7 +71,7 @@ Visualize coefficients and loss function plot (`plots=True`).
   
 <br />
     
-- Evaluate kinematic encoding model with 5-fold cross validation 
+- Evaluate kinematic encoding model using 5-fold cross validation 
 (`cv=True`; `kcv` defaults to 5) 
 repeated 50 times (`ncv`, defaults to 50). 
 Display detailed info (`verbose=2`).
@@ -171,7 +171,7 @@ The number of permutations (`n_perms`) defaults to 200.
     ```
   Visualize estimated readout model coefficients 
   (mean over observers of normalized kinematic readout vectors), ordered by 
-  relevance of kinematic features in [encoding](#encidx) (`enc_idx`):
+  [relevance of kinematic features in encoding](#encidx) (`enc_idx`):
     ```python
     readbetas_all = read_outs1['betas'].mean(axis=1)
     readbetas_all = readbetas_all/np.linalg.norm(readbetas_all,ord=1,axis=1,keepdims=True)
@@ -277,6 +277,6 @@ All code in this section can be found in `example_main.py`.
 Montobbio, N., Cavallo, A., Albergo, D., Ansuini, C., 
 Battaglia, F., Podda, J., Nobili, L., Panzeri, S., 
 Becchio, C. (2021).
-_Intersecting intention encoding and readout in autism_.
+_Intersecting kinematic encoding and readout of intention in autism_.
 [**doi**]
 
