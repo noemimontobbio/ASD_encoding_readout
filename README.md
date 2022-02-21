@@ -276,7 +276,8 @@ All code in this section can be found in `example_main.py`.
 <a id="1">[1]</a> 
 Montobbio, N., Cavallo, A., Albergo, D., Ansuini, C., 
 Battaglia, F., Podda, J., Nobili, L., Panzeri, S., 
-Becchio, C. (2021).
+Becchio, C. (2022).
 _Intersecting kinematic encoding and readout of intention in autism_.
-[**doi**]
+Proceedings of the National Academy of Sciences, 119(5). 
+doi: [10.1073/pnas.2114648119](https://www.pnas.org/content/119/5/e2114648119)
 
